@@ -1,0 +1,56 @@
+%Fase1; Importar datos
+cd('D:\Matlab')
+S = load('InSample_STW_400p-15d-270i-1800e.txt')
+
+%Fase2; Seleccionar datos a analizar
+D = S(:,5) %Columna 5
+F = S(:,7) %Columna 7
+G = S(:,8) %Columna 8
+H = S(:,9) %Columna 9
+J = S(:,10) %Columna 10
+V1 = S(:,2)
+V2 = S(:,3)
+V3 = S(:,4)
+Z = S(:,6) %Variable de salida
+T = S(:,1) %Variable independiente
+Datos = [D F G H J V1 V2 V3 Z] 
+
+%Fase3; Normalizar los datos
+DatosN = Datos
+
+for i = 1:9
+        DatosN(:,i) = (Datos(:,i) - min(Datos(:,i)))/(max(Datos(:,i))- min(Datos(:,i)))
+end
+
+%Fase4; Darle el random por independiente
+    %A---Crear 9 columnas de randperm distintas.
+    R1 = randperm(36800)
+    R1 = R1'
+    R2 = randperm(36800)
+    R2 = R2'
+    R3 = randperm(36800)
+    R3 = R3'
+    R4 = randperm(36800)
+    R4 = R4'
+    R5 = randperm(36800)
+    R5 = R5'
+    R6 = randperm(36800)
+    R6 = R6'
+    R7 = randperm(36800)
+    R7 = R7'
+    R8 = randperm(36800)
+    R8 = R8'
+    R9 = randperm(36800)
+    R9 = R9'
+    %B---Juntarlas
+    Random = [R1 R2 R3 R4 R5 R6 R7 R8 R9]
+%Fase5, Cambiar posición según el random
+DatosR = DatosN
+for i = 1:9
+    DatosR(:,i) = DatosN(Random(:,i))
+end
+
+%Fase6, Separar segun entradas.
+entrada1 = DatosR(1:36800,1:5) %Caracteristicas
+entrada2 = DatosR(1:36800,6:8) %Valvulas
+salida =  DatosR(:,end) %Variable de salida
